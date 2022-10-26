@@ -6,7 +6,7 @@
 /*   By: nlegrand <nlegrand@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/25 04:23:59 by nlegrand          #+#    #+#             */
-/*   Updated: 2022/10/26 12:30:13 by nlegrand         ###   ########.fr       */
+/*   Updated: 2022/10/26 14:10:54 by nlegrand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,17 +19,48 @@ char	*get_next_line(int fd)
 	char			*buf;
 	int				len;
 	t_line			*line;
+	char			*tmp;
 
 	buf = get_fd_buf(fd, &fds);
 	if (buf == NULL)
 		return (NULL);
 	if (fd < 0 || BUFFER_SIZE < 1)
 		return (NULL);
+	tmp = deplete_buf(buf);
+	if (tmp != NULL)
+		return (tmp);
 	len = 0;
 	line = NULL;
 	if (read_line(fd, &line, &len, buf) == -1)
 		return (clear_line(&line), NULL);
 	return (make_line(&line, len));
+}
+
+// removes a line from buf if it is complete
+char	*deplete_buf(char *buf)
+{
+	char	*end;
+	char	*tmp;
+	int		i;
+
+	end = get_endl(buf);
+	if (end == NULL || (*end != '\n'))
+		return (NULL);
+	tmp = malloc(sizeof(char) * (end - buf + 2));
+	if (tmp == NULL)
+		return (NULL);
+	i = 0;
+	while (buf[i] != '\n')
+	{
+		tmp[i] = buf[i];
+		++i;
+	}
+	tmp[i] = '\n';
+	tmp[i + 1] = '\0';
+	while (*(end + 1))
+		*buf++ = *(end++ + 1);
+	*buf = '\0';
+	return (tmp);
 }
 
 // get corresponding fd buffer from chained list, creates one if non-existant

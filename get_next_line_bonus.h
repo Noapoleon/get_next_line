@@ -6,7 +6,7 @@
 /*   By: nlegrand <nlegrand@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/25 04:25:54 by nlegrand          #+#    #+#             */
-/*   Updated: 2022/10/26 12:30:57 by nlegrand         ###   ########.fr       */
+/*   Updated: 2022/10/26 14:11:18 by nlegrand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,7 @@ typedef struct s_fds
 }				t_fds;
 
 char	*get_next_line(int fd);
+char	*deplete_buf(char *buf);
 char	*get_fd_buf(int fd, t_fds **fds);
 int		read_line(int fd, t_line **line, int *len, char *buf);
 t_line	*read_one(int fd, int *ret, int *len, char *buf);
