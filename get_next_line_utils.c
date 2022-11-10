@@ -6,7 +6,7 @@
 /*   By: nlegrand <nlegrand@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/25 18:36:22 by nlegrand          #+#    #+#             */
-/*   Updated: 2022/11/02 07:12:18 by nlegrand         ###   ########.fr       */
+/*   Updated: 2022/11/09 12:44:54 by nlegrand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,7 +75,7 @@ void	split_buf_rest(char *tmpbuf, char *buf)
 	i = 0;
 	end = get_endl(tmpbuf);
 	if (end == NULL)
-		return ((void)(buf = '\0'));
+		return ((void)(*buf = '\0'));
 	while (end[i] != '\0')
 	{
 		buf[i] = end[i + 1];

@@ -6,7 +6,7 @@
 /*   By: nlegrand <nlegrand@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/25 04:23:59 by nlegrand          #+#    #+#             */
-/*   Updated: 2022/10/26 14:10:54 by nlegrand         ###   ########.fr       */
+/*   Updated: 2022/11/10 02:43:46 by nlegrand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,16 +21,15 @@ char	*get_next_line(int fd)
 	t_line			*line;
 	char			*tmp;
 
+	if (fd < 0 || BUFFER_SIZE < 1)
+		return (NULL);
 	buf = get_fd_buf(fd, &fds);
 	if (buf == NULL)
-		return (NULL);
-	if (fd < 0 || BUFFER_SIZE < 1)
 		return (NULL);
 	tmp = deplete_buf(buf);
 	if (tmp != NULL)
 		return (tmp);
 	len = 0;
-	line = NULL;
 	if (read_line(fd, &line, &len, buf) == -1)
 		return (clear_line(&line), NULL);
 	return (make_line(&line, len));
@@ -68,7 +67,6 @@ char	*get_fd_buf(int fd, t_fds **fds)
 {
 	t_fds	*curr;
 	t_fds	*prev;
-	int		i;
 
 	curr = *fds;
 	while (curr && (curr->fd != fd))
@@ -79,16 +77,17 @@ char	*get_fd_buf(int fd, t_fds **fds)
 	if (curr == NULL)
 	{
 		curr = malloc(sizeof(t_fds));
+		if (curr == NULL)
+			return (NULL);
 		curr->fd = fd;
 		curr->next = NULL;
-		i = 0;
-		while (i < BUFFER_SIZE + 1)
-			curr->buf[i++] = '\0';
+		fd = 0;
+		while (fd < BUFFER_SIZE + 1)
+			curr->buf[fd++] = '\0';
 		if (*fds == NULL)
 			*fds = curr;
 		else
 			prev->next = curr;
-		return (curr->buf);
 	}
 	return (curr->buf);
 }
